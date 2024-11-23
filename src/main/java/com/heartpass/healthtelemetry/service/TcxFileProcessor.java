@@ -16,6 +16,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Slf4j
@@ -28,46 +30,50 @@ public class TcxFileProcessor {
     public ArrayList<HealthEvent> processFile(String fileName) throws IOException {
         Resource resource = resourceLoader.getResource("classpath:activity_11_21_2024_gym.tcx");
         ArrayList<HealthEvent> healthEventList = new ArrayList();
-
         try (InputStream inputStream = resource.getInputStream()) {
             XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-            XMLStreamReader streamReader = xmlInputFactory.createXMLStreamReader(new FileInputStream(resource.getFile()));
+            XMLEventReader reader = xmlInputFactory.createXMLEventReader(new FileInputStream(resource.getFile()));
             HealthEvent healthEvent = null;
-            while (streamReader.hasNext()) {
-                //Move to next event
-                streamReader.next();
+            while (reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
 
-                //Check if its 'START_ELEMENT'
-                if (streamReader.getEventType() == XMLStreamReader.START_ELEMENT) {
-                    //employee tag - opened
-                    if (streamReader.getLocalName().equalsIgnoreCase("Trackpoint")) {
+                if (event.isStartElement()) {
 
-                        healthEvent = new HealthEvent();
-
-                        //Read name data
-                        if (streamReader.getLocalName().equalsIgnoreCase("Time")) {
-                            healthEvent.setEventDateTime(Instant.parse(streamReader.getElementText()));
-                        }
-
-                        //Read title data
-                        if (streamReader.getLocalName().equalsIgnoreCase("Value")) {
-                            healthEvent.setHeartRateBpm(Integer.parseInt(streamReader.getElementText()));
-                        }
+                    StartElement element = event.asStartElement();
+                    String foo = element.getName().getLocalPart();
+                    switch (element.getName().getLocalPart()) {
+                        // if <staff>
+                        case "Trackpoint":
+                            healthEvent = new HealthEvent();
+                            healthEvent.setUserId("coryadams@yahoo.com");
+                            break;
+                        case "Time":
+                            event = reader.nextEvent();
+                            if (event.isCharacters()) {
+                                healthEvent.setEventDateTime(ZonedDateTime.parse(event.asCharacters().getData()));
+                            }
+                            break;
+                        case "HeartRateBpm":
+                            event = reader.nextEvent();
+                            event = reader.nextEvent();
+                            event = reader.nextEvent();
+                            healthEvent.setHeartRateBpm(Integer.parseInt(event.asCharacters().getData()));
+                            break;
                     }
+                }
 
-                    //If employee tag is closed then add the employee object to list
-                    if (streamReader.getEventType() == XMLStreamReader.END_ELEMENT) {
-                        if (streamReader.getLocalName().equalsIgnoreCase("employee")) {
-                            healthEventList.add(healthEvent);
-                        }
+                if (event.isEndElement()) {
+                    EndElement endElement = event.asEndElement();
+                    if (endElement.getName().getLocalPart().equals("Trackpoint")) {
+                        healthEventList.add(healthEvent);
                     }
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return healthEventList;
     }
+
 
 }

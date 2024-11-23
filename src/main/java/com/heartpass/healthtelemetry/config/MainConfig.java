@@ -1,6 +1,8 @@
 package com.heartpass.healthtelemetry.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +15,12 @@ import java.text.SimpleDateFormat;
 public class MainConfig {
 
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer objectMapperBuilderCustomizer() {
-        return builder -> {
-            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-            builder.dateFormat(new SimpleDateFormat("yyyy-MM-dd"));
-            // Add other customizations as needed
-        };
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
+        return mapper;
     }
 }
 
