@@ -37,5 +37,5 @@ The Endpoints are as follows
 
 1) Controller Should take a Multipart file as input along with FileRequest body.
 2) Complete Repository for Clickhouse to store HealthEvent data.
-3) Create simple UI to take input for a user id and datetime range and display heart rate.
+3) Create a simple UI to take input for a user id and datetime range and display heart rate data in a graph.
 
