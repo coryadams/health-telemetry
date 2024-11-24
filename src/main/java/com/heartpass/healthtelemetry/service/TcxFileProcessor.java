@@ -26,7 +26,7 @@ public class TcxFileProcessor {
     private ResourceLoader resourceLoader;
 
     public ArrayList<HealthEvent> processFile(String fileName, String userName) throws IOException {
-        ArrayList<HealthEvent> healthEventList = new ArrayList();
+        ArrayList<HealthEvent> healthEvents = new ArrayList();
         try {
             File file = new File(fileName);
             InputStream inputStream = new FileInputStream(file);
@@ -63,7 +63,7 @@ public class TcxFileProcessor {
                 if (event.isEndElement()) {
                     EndElement endElement = event.asEndElement();
                     if (endElement.getName().getLocalPart().equals("Trackpoint")) {
-                        healthEventList.add(healthEvent);
+                        healthEvents.add(healthEvent);
                     }
                 }
             }
@@ -73,6 +73,7 @@ public class TcxFileProcessor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return healthEventList;
+        log.info("TCX file processed with {} events.", healthEvents.size());
+        return healthEvents;
     }
 }
