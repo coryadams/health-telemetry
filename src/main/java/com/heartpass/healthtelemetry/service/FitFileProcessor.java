@@ -11,6 +11,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,22 +21,17 @@ import java.util.ArrayList;
 @Service
 public class FitFileProcessor {
 
-    @Autowired
-    private ResourceLoader resourceLoader;
-
     public ArrayList<HealthEvent> processFile(String fileName, String userName) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:" + fileName);
         Decode decode = new Decode();
         MesgBroadcaster mesgBroadcaster = new MesgBroadcaster();
         ArrayList<HealthEvent> healthEvents = new ArrayList<>();
         GarminMessageListener garminMessageListener = new GarminMessageListener(healthEvents, userName);
 
-        InputStream inputStream = resource.getInputStream();
-
-        checkFitFileIntegrity(inputStream, resource, fileName, decode);
+        InputStream inputStream = null;
+        File file = new File(fileName);
 
         try {
-            inputStream = resource.getInputStream();
+            inputStream = new FileInputStream(fileName);
         } catch (java.io.IOException e) {
             throw new RuntimeException("Error opening file " + fileName);
         }
@@ -59,27 +56,14 @@ public class FitFileProcessor {
                 }
             }
         }
-
         try {
             inputStream.close();
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
         }
+        inputStream.close();
+        file.delete();
         log.info("FIT file processed with {} events.", healthEvents.size());
-
         return healthEvents;
-    }
-
-    public void checkFitFileIntegrity(InputStream inputStream, Resource resource, String fileName,
-                                      Decode decode) throws RuntimeException {
-        try {
-            if (!decode.checkFileIntegrity(inputStream)) {
-                log.error("FIT file integrity check failed for file: {}", fileName);
-                throw new RuntimeException("FIT file integrity failed.");
-            }
-        } catch (RuntimeException e) {
-            log.error("Exception Checking File Integrity: {}", fileName, e);
-            throw e;
-        }
     }
 }

@@ -3,7 +3,6 @@ package com.heartpass.healthtelemetry.service;
 import com.heartpass.healthtelemetry.domain.HealthEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +11,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,11 +26,12 @@ public class TcxFileProcessor {
     private ResourceLoader resourceLoader;
 
     public ArrayList<HealthEvent> processFile(String fileName, String userName) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:" + fileName);
         ArrayList<HealthEvent> healthEventList = new ArrayList();
-        try (InputStream inputStream = resource.getInputStream()) {
+        try {
+            File file = new File(fileName);
+            InputStream inputStream = new FileInputStream(file);
             XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-            XMLEventReader reader = xmlInputFactory.createXMLEventReader(new FileInputStream(resource.getFile()));
+            XMLEventReader reader = xmlInputFactory.createXMLEventReader(inputStream);
             HealthEvent healthEvent = null;
             while (reader.hasNext()) {
                 XMLEvent event = reader.nextEvent();
@@ -66,6 +67,9 @@ public class TcxFileProcessor {
                     }
                 }
             }
+            inputStream.close();
+            reader.close();
+            file.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }
