@@ -14,20 +14,17 @@ Start the Server
 
 ./clickhouse client
 
-## Test locally Postman
 
-This will rely on a file in the Resources directory which is a Garmin TCX file: 
-
-http://localhost:8080/tcxfile/activity_11_21_2024_gym.tcx
 
 ## Usage Notes
 
-The files are included in the project and are referenced with a request of type FileRequest
+The files are included in the project and are referenced with a request of type FileRequest for testing locally
+via PostMan or other client with the following message structure.
 
 Example
 
 {
-"userName": "coryadams@yahoo.com",
+"userName": "testUser@google.com",
 "fileName": "17593651400_ACTIVITY.fit"
 }
 
