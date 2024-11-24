@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Description;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
 import java.text.SimpleDateFormat;
 
@@ -21,6 +25,35 @@ public class MainConfig {
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"));
         return mapper;
     }
+
+//    @Bean
+//    @Description("Thymeleaf Template Resolver")
+//    public SpringResourceTemplateResolver templateResolver() {
+//        SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+//        templateResolver.setPrefix("templates/");
+//        templateResolver.setSuffix(".html");
+//        templateResolver.setTemplateMode("HTML5");
+//
+//        return templateResolver;
+//    }
+//
+//    @Bean
+//    @Description("Thymeleaf Template Engine")
+//    public SpringTemplateEngine templateEngine() {
+//        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+//        templateEngine.setTemplateResolver(templateResolver());
+//        //templateEngine.setTemplateEngineMessageSource(messageSource());
+//        return templateEngine;
+//    }
+//
+//    @Bean
+//    @Description("Thymeleaf View Resolver")
+//    public ThymeleafViewResolver viewResolver() {
+//        ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+//        viewResolver.setTemplateEngine(templateEngine());
+//        viewResolver.setOrder(1);
+//        return viewResolver;
+//    }
 }
 
 
