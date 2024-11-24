@@ -30,6 +30,12 @@
         <java.version>23</java.version>
     </properties>
     <dependencies>
+        <!-- Garmin SDK -->
+        <dependency>
+            <groupId>com.garmin</groupId>
+            <artifactId>fit</artifactId>
+            <version>21.141.0</version>
+        </dependency>
         <dependency>
             <groupId>com.clickhouse</groupId>
             <artifactId>clickhouse-jdbc</artifactId>

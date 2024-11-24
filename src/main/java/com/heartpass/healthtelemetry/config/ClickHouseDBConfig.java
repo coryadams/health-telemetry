@@ -1,7 +1,5 @@
 package com.heartpass.healthtelemetry.config;
 
-import com.clickhouse.client.ClickHouseClient;
-import com.clickhouse.client.ClickHouseConfig;
 import com.clickhouse.jdbc.ClickHouseDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

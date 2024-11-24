@@ -3,7 +3,6 @@ package com.heartpass.healthtelemetry.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
 
 @Data

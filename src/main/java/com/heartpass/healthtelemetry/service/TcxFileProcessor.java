@@ -7,17 +7,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.events.*;
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @Slf4j
@@ -27,8 +25,8 @@ public class TcxFileProcessor {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public ArrayList<HealthEvent> processFile(String fileName) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:activity_11_21_2024_gym.tcx");
+    public ArrayList<HealthEvent> processFile(String fileName, String userName) throws IOException {
+        Resource resource = resourceLoader.getResource("classpath:" + fileName);
         ArrayList<HealthEvent> healthEventList = new ArrayList();
         try (InputStream inputStream = resource.getInputStream()) {
             XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
@@ -45,7 +43,7 @@ public class TcxFileProcessor {
                         // if <staff>
                         case "Trackpoint":
                             healthEvent = new HealthEvent();
-                            healthEvent.setUserId("coryadams@yahoo.com");
+                            healthEvent.setUserId(userName);
                             break;
                         case "Time":
                             event = reader.nextEvent();
@@ -61,7 +59,6 @@ public class TcxFileProcessor {
                             break;
                     }
                 }
-
                 if (event.isEndElement()) {
                     EndElement endElement = event.asEndElement();
                     if (endElement.getName().getLocalPart().equals("Trackpoint")) {
@@ -74,6 +71,4 @@ public class TcxFileProcessor {
         }
         return healthEventList;
     }
-
-
 }
