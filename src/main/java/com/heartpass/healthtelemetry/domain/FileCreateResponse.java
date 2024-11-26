@@ -1,9 +1,15 @@
 package com.heartpass.healthtelemetry.domain;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class FileRequest {
+@Builder
+public class FileCreateResponse {
+
+    String message;
+
+    private int eventsProcessed;
 
     private String userId;
 

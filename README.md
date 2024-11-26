@@ -36,6 +36,5 @@ Example JSON Request Body
 
 ## Todo
 
-- Complete Repository for Clickhouse to store HealthEvent data.
 - Create a simple UI to take input for a user id and datetime range and display heart rate data in a graph.
 

@@ -1,5 +1,6 @@
 package com.heartpass.healthtelemetry.controller;
 
+import com.heartpass.healthtelemetry.domain.FileCreateResponse;
 import com.heartpass.healthtelemetry.domain.HealthEvent;
 import com.heartpass.healthtelemetry.service.MetricsFileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,8 @@ public class FileLoaderController {
     private String fileSavePath;
 
     @PostMapping("/tcxfile/")
-    public ResponseEntity<ArrayList<HealthEvent>> handleTcxFileUpload(@RequestParam("file") MultipartFile file,
-        @RequestParam String sessionId, @RequestParam String userName) {
+    public ResponseEntity<FileCreateResponse> handleTcxFileUpload(@RequestParam("file") MultipartFile file,
+        @RequestParam String sessionId, @RequestParam String userId) {
         ArrayList<HealthEvent> healthEvents = null;
         try {
             // Check the file's size
@@ -33,17 +34,23 @@ public class FileLoaderController {
             // Save the file to the server
             file.transferTo(new java.io.File(fileSavePath + file.getOriginalFilename()));
             // Process the file / uploaded data and save the event data
-            healthEvents = metricsFileService.storeTcxFile(fileSavePath + file.getOriginalFilename(), userName,
+            healthEvents = metricsFileService.storeTcxFile(fileSavePath + file.getOriginalFilename(), userId,
                     sessionId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return ResponseEntity.ok(healthEvents);
+        FileCreateResponse response = FileCreateResponse.builder()
+                .message("TCX file successfully saved with " + healthEvents.size() + " events processed.")
+                .fileName(file.getOriginalFilename())
+                .userId(userId)
+                .sessionId(healthEvents.get(0).getSessionId())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/fitfile/")
-    public ResponseEntity<ArrayList<HealthEvent>> handleFitFileUpload(@RequestParam("file") MultipartFile file,
-        @RequestParam String sessionId, @RequestParam String userName) {
+    public ResponseEntity<FileCreateResponse> handleFitFileUpload(@RequestParam("file") MultipartFile file,
+                                                                  @RequestParam String sessionId, @RequestParam String userId) {
         ArrayList<HealthEvent> healthEvents = null;
         try {
             // Check the file's size
@@ -53,11 +60,17 @@ public class FileLoaderController {
             // Save the file to the server
             file.transferTo(new java.io.File(fileSavePath + file.getOriginalFilename()));
             // Process the file / uploaded data and save the event data
-            healthEvents = metricsFileService.storeFitFile(fileSavePath + file.getOriginalFilename(), userName,
+            healthEvents = metricsFileService.storeFitFile(fileSavePath + file.getOriginalFilename(), userId,
                     sessionId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return ResponseEntity.ok(healthEvents);
+        FileCreateResponse response = FileCreateResponse.builder()
+                .message("FIT file successfully saved with " + healthEvents.size() + " events processed.")
+                .fileName(file.getOriginalFilename())
+                .userId(userId)
+                .sessionId(healthEvents.get(0).getSessionId())
+                .build();
+        return ResponseEntity.ok(response);
     }
 }
