@@ -3,11 +3,9 @@ package com.heartpass.healthtelemetry.domain;
 import lombok.Data;
 
 @Data
-public class FileRequest {
+public class HealthEventsRequest {
 
     private String userId;
-
-    private String fileName;
 
     private String sessionId;
 

@@ -27,6 +27,9 @@
         <url/>
     </scm>
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <apache-httpclient.version>5.3.1</apache-httpclient.version>
         <java.version>23</java.version>
     </properties>
     <dependencies>
@@ -36,12 +39,21 @@
             <artifactId>fit</artifactId>
             <version>21.141.0</version>
         </dependency>
+<!--  Clickhouse -->
         <dependency>
             <groupId>com.clickhouse</groupId>
-            <artifactId>clickhouse-jdbc</artifactId>
-            <version>0.7.1</version>
-            <!-- use uber jar with all dependencies included, change classifier to http for smaller jar -->
-            <classifier>all</classifier>
+            <artifactId>clickhouse-data</artifactId>
+            <version>0.7.1-patch1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.clickhouse</groupId>
+            <artifactId>client-v2</artifactId>
+            <version>0.7.1-patch1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.clickhouse</groupId>
+            <artifactId>clickhouse-http-client</artifactId>
+            <version>0.7.1-patch1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -88,6 +100,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 

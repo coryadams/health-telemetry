@@ -1,4 +1,4 @@
-package com.heartpass.healthtelemetry.service;
+package com.heartpass.healthtelemetry.biz;
 
 import com.garmin.fit.Decode;
 import com.garmin.fit.FitRuntimeException;
@@ -6,9 +6,6 @@ import com.garmin.fit.MesgBroadcaster;
 import com.garmin.fit.RecordMesgListener;
 import com.heartpass.healthtelemetry.domain.HealthEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -19,13 +16,14 @@ import java.util.ArrayList;
 
 @Slf4j
 @Service
-public class FitFileProcessor {
+public class FitFileProcessor implements FileProcessor {
 
-    public ArrayList<HealthEvent> processFile(String fileName, String userName) throws IOException {
+    @Override
+    public ArrayList<HealthEvent> processFile(String fileName, String userId, String sessionId) throws IOException {
         Decode decode = new Decode();
         MesgBroadcaster mesgBroadcaster = new MesgBroadcaster();
         ArrayList<HealthEvent> healthEvents = new ArrayList<>();
-        GarminMessageListener garminMessageListener = new GarminMessageListener(healthEvents, userName);
+        GarminMessageListener garminMessageListener = new GarminMessageListener(healthEvents, userId, sessionId);
 
         InputStream inputStream = null;
         File file = new File(fileName);

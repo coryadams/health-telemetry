@@ -1,4 +1,4 @@
-package com.heartpass.healthtelemetry.service;
+package com.heartpass.healthtelemetry.biz;
 
 import com.heartpass.healthtelemetry.domain.HealthEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -15,17 +15,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 
 @Slf4j
 @Service
-public class TcxFileProcessor {
+public class TcxFileProcessor implements FileProcessor {
 
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public ArrayList<HealthEvent> processFile(String fileName, String userName) throws IOException {
+    @Override
+    public ArrayList<HealthEvent> processFile(String fileName, String userId, String sessionId) throws IOException {
         ArrayList<HealthEvent> healthEvents = new ArrayList();
         try {
             File file = new File(fileName);
@@ -39,17 +42,21 @@ public class TcxFileProcessor {
                 if (event.isStartElement()) {
 
                     StartElement element = event.asStartElement();
-                    String foo = element.getName().getLocalPart();
+
                     switch (element.getName().getLocalPart()) {
                         // if <staff>
                         case "Trackpoint":
                             healthEvent = new HealthEvent();
-                            healthEvent.setUserId(userName);
+                            healthEvent.setSessionId(sessionId);
+                            healthEvent.setUserId(userId);
                             break;
                         case "Time":
                             event = reader.nextEvent();
                             if (event.isCharacters()) {
-                                healthEvent.setEventDateTime(ZonedDateTime.parse(event.asCharacters().getData()));
+                                // Parse the ISO 8601 string into an OffsetDateTime
+                                OffsetDateTime offsetDateTime = OffsetDateTime.parse(event.asCharacters().getData());
+                                // Convert the OffsetDateTime to a LocalDateTime
+                                healthEvent.setEventDateTime(offsetDateTime.toLocalDateTime());
                             }
                             break;
                         case "HeartRateBpm":
