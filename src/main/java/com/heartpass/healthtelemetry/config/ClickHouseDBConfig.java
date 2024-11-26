@@ -23,14 +23,6 @@ public class ClickHouseDBConfig {
     @Value("${clickhouse.max.connections}")
     private int maxConnections;
 
-//    @Bean
-//    public ClickHouseDataSource getClickHouseDataSource() throws SQLException {
-//        Properties properties = new Properties();
-//        properties.setProperty("user", username);
-//        properties.setProperty("password", password);
-//        return new ClickHouseDataSource(clickhouseUrl, properties);
-//    }
-
     @Bean
     public Client chDirectClient() {
         return new Client.Builder()

@@ -33,8 +33,28 @@ Example JSON Request Body
     "fileName": "17593651400_ACTIVITY.fit"
     }
 
+## Obersvability with OTEL
+
+This application will use Open Telemetry for Traces, Metrics and Logging with the ability to 
+store OTLP data into Clickhouse
+
+Installation of the OTEL Collector is here : https://opentelemetry.io/docs/collector/installation/
+
+For Linux 
+
+If you modify the Collector configuration file or /etc/otelcol/otelcol.conf, restart the otelcol service to apply the changes by running:
+
+sudo systemctl restart otelcol
+
+To check the output from the otelcol service, run:
+
+sudo journalctl -fu otelcol
 
 ## Todo
 
 - Create a simple UI to take input for a user id and datetime range and display heart rate data in a graph.
 
+For evaluating performance:
+- Consider getting location data for alt, lat, long, temp - Do we need GPX files for this?
+
+- 
