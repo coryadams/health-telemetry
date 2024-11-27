@@ -5,9 +5,10 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<p> Welcome <span th:text="${userProfile.firstName}"/> to Health Telemetry</p>
+<p> Welcome <span th:text="${firstName}"/> to Health Telemetry</p>
 
-Add main landing page details
+<a th:href="@{/file_upload.html}">Upload a file</a>
+<a th:href="@{/activities.html}">View Saved Activities</a>
 
 </body>
 </html>

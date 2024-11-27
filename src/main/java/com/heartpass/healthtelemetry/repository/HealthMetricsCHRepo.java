@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Service
-public class HealthMetricsRepo {
+public class HealthMetricsCHRepo {
 
     @Autowired
     Client chDirectClient;
@@ -37,12 +37,12 @@ public class HealthMetricsRepo {
         chDirectClient.register(HealthEvent.class, chDirectClient.getTableSchema(TABLE_NAME));
     }
 
-    public ArrayList<HealthEvent> findByUserIdAndSessionId(String userId, String sessionId) {
+    public ArrayList<HealthEvent> findByUserProfileIdAndActivityId(Integer userProfileId, Integer activityId) {
         ArrayList<HealthEvent> events = new ArrayList<>();
         log.info("Reading data from table: {}", TABLE_NAME);
 
-        final String sql = "select * from " + TABLE_NAME + " where user_id = '" + userId + "' and " +
-                "session_id = '" + sessionId + "'";
+        final String sql = "select * from " + TABLE_NAME + " where user_profile_id = '" + userProfileId + "' and " +
+                "activity_id = '" + activityId + "'";
         log.info("Executing query: {}", sql);
          // Default format is RowBinaryWithNamesAndTypesFormatReader
         QueryResponse response = null;
@@ -55,8 +55,8 @@ public class HealthMetricsRepo {
                 reader.next(); // Read the next record from stream and parse it
                 // get values
                 HealthEvent healthEvent = HealthEvent.builder()
-                        .userId(reader.getString("user_id"))
-                        .sessionId(reader.getString("session_id"))
+                        .userProfileId(reader.getInteger("user_profile_id"))
+                        .activityId(reader.getInteger("activity_id"))
                         .heartRateBpm(reader.getInteger("heart_rate_bpm"))
                         .eventDateTime(reader.getLocalDateTime("event_datetime"))
                         .build();

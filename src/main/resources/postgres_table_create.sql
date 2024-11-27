@@ -10,5 +10,17 @@ CREATE TABLE user_profile
     created_at   timestamp,
     updated_at   timestamp
 );
-CREATE INDEX user_profile_idx ON user_profile (user_id);
+CREATE UNIQUE INDEX user_profile_idx ON user_profile (user_id);
 CREATE INDEX user_profile_email_idx ON user_profile (email);
+
+CREATE TABLE activity
+(
+    id              SERIAL PRIMARY KEY,
+    name            varchar(125),
+    description     varchar(255),
+    file_name       varchar(255),
+    activity_date    timestamp,
+    user_profile_id integer,
+    created_at      timestamp,
+    FOREIGN KEY (user_profile_id) REFERENCES user_profile(id)
+);

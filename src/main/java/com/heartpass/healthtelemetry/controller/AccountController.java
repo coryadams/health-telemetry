@@ -1,6 +1,8 @@
 package com.heartpass.healthtelemetry.controller;
 
 import com.heartpass.healthtelemetry.entity.UserProfile;
+import com.heartpass.healthtelemetry.service.UserProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,9 @@ import java.time.LocalDateTime;
 
 @Controller
 public class AccountController {
+
+    @Autowired
+    UserProfileService userProfileService;
 
     @GetMapping({"/create_account.html"})
     public String createAccount(Model model) {
@@ -26,6 +31,7 @@ public class AccountController {
         userProfile.setUpdatedAt(LocalDateTime.now());
 
         // Save it
+        userProfileService.save(userProfile);
 
         model.addAttribute("userProfile", userProfile);
         return "/landing";

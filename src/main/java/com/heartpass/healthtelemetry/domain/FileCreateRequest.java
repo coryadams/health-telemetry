@@ -9,6 +9,8 @@ public class FileCreateRequest {
 
     private String fileName;
 
-    private String sessionId;
+    private String activityName;
+
+    private String activityDescription;
 
 }

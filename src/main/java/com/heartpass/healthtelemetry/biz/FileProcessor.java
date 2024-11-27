@@ -7,5 +7,5 @@ import java.util.ArrayList;
 
 public interface FileProcessor {
 
-    public ArrayList<HealthEvent> processFile(String fileName, String userId, String sessionId) throws IOException;
+    public ArrayList<HealthEvent> processFile(String fileName, Integer userProfileId, Integer activityId) throws IOException;
 }

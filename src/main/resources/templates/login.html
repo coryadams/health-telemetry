@@ -10,12 +10,13 @@
 <div class="main">
     <h1>Heart Pass</h1>
     <h3>Enter your login credentials</h3>
+    <span th:text="${authError}">Authentication Failed</span>
 
-    <form action="">
-        <label for="user_id">
+    <form action="#" th:action="@{/login}" th:object="${userProfile}" method="post">
+        <label for="userId">
             Username:
         </label>
-        <input type="text" id="user_id" name="user_id"
+        <input type="text" id="userId" name="userId"
                placeholder="Enter your Username" required>
 
         <label for="password">

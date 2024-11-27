@@ -15,9 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 
 @Slf4j
@@ -28,7 +26,7 @@ public class TcxFileProcessor implements FileProcessor {
     private ResourceLoader resourceLoader;
 
     @Override
-    public ArrayList<HealthEvent> processFile(String fileName, String userId, String sessionId) throws IOException {
+    public ArrayList<HealthEvent> processFile(String fileName, Integer userProfileId, Integer activityId) throws IOException {
         ArrayList<HealthEvent> healthEvents = new ArrayList();
         try {
             File file = new File(fileName);
@@ -47,8 +45,8 @@ public class TcxFileProcessor implements FileProcessor {
                         // if <staff>
                         case "Trackpoint":
                             healthEvent = new HealthEvent();
-                            healthEvent.setSessionId(sessionId);
-                            healthEvent.setUserId(userId);
+                            healthEvent.setActivityId(activityId);
+                            healthEvent.setUserProfileId(userProfileId);
                             break;
                         case "Time":
                             event = reader.nextEvent();

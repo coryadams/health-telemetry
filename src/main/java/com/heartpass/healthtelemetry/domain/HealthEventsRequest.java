@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class HealthEventsRequest {
 
-    private String userId;
+    private Integer userProfileId;
 
-    private String sessionId;
+    private Integer activityId;
 
 }

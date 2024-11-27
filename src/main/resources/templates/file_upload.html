@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Upload A File</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="main">
+    <h1>Heart Pass</h1>
+    <h3>Activity File Upload (TCX or FIT)</h3>
+
+    <form action="#" th:action="@{/tcxfile}" th:object="${fileCreateRequest}" method="post">
+        <input type="hidden" th:value="*{userId}" id="userId" name="userId"/>
+        <label>
+            File:
+        </label>
+        <input type="file" id="file" name="file"
+               placeholder="Enter your Username" required>
+
+        <label for="activityName">
+            Activity Name:
+        </label>
+        <input type="text" id="activityName" name="activityName"
+               placeholder="">
+
+        <label for="activityDescription">
+            Activity Description
+        </label>
+        <input type="text=" id="activityDescription" name="activityDescription"
+               placeholder="">
+
+        <div class="wrap">
+            <button type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

@@ -2,7 +2,7 @@ package com.heartpass.healthtelemetry.service;
 
 import com.heartpass.healthtelemetry.biz.FileProcessor;
 import com.heartpass.healthtelemetry.domain.HealthEvent;
-import com.heartpass.healthtelemetry.repository.HealthMetricsRepo;
+import com.heartpass.healthtelemetry.repository.HealthMetricsCHRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class MetricsFileService {
 
     @Autowired
-    HealthMetricsRepo healthMetricsRepo;
+    HealthMetricsCHRepo healthMetricsCHRepo;
 
     @Autowired
     FileProcessor fitFileProcessor;
@@ -24,35 +24,35 @@ public class MetricsFileService {
     FileProcessor tcxFileProcessor;
 
     public int storeHealthEvents(ArrayList events) {
-        return healthMetricsRepo.save(events);
+        return healthMetricsCHRepo.save(events);
     }
 
-    public ArrayList<HealthEvent> storeFitFile(String fileName, String userId, String sessionId) {
+    public ArrayList<HealthEvent> storeFitFile(String fileName, Integer userProfileId, Integer activityId) {
         ArrayList<HealthEvent> events = null;
         try {
-            events = fitFileProcessor.processFile(fileName, userId, sessionId);
-            int eventsSize = healthMetricsRepo.save(events);
-            log.info("Stored {} FIT events for sessionId {} ", eventsSize, sessionId);
+            events = fitFileProcessor.processFile(fileName, userProfileId, activityId);
+            int eventsSize = healthMetricsCHRepo.save(events);
+            log.info("Stored {} FIT events for activityId {} ", eventsSize, activityId);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return events;
     }
 
-    public ArrayList<HealthEvent> storeTcxFile(String fileName, String userId, String sessionId) {
+    public ArrayList<HealthEvent> storeTcxFile(String fileName, Integer userProfileId, Integer activityId) {
         ArrayList<HealthEvent> events = null;
         try {
-            events = tcxFileProcessor.processFile(fileName, userId, sessionId);
-            int eventsSize = healthMetricsRepo.save(events);
-            log.info("Stored {} TCX events for sessionId {} ", eventsSize, sessionId);
+            events = tcxFileProcessor.processFile(fileName, userProfileId, activityId);
+            int eventsSize = healthMetricsCHRepo.save(events);
+            log.info("Stored {} TCX events for activityId {} ", eventsSize, activityId);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return events;
     }
 
-    public ArrayList<HealthEvent> retrieveHealthEvents(String userId, String sessionId) {
-        ArrayList<HealthEvent> events = healthMetricsRepo.findByUserIdAndSessionId(userId, sessionId);
+    public ArrayList<HealthEvent> retrieveHealthEvents(Integer userProfileId, Integer activityId) {
+        ArrayList<HealthEvent> events = healthMetricsCHRepo.findByUserProfileIdAndActivityId(userProfileId, activityId);
 
         return events;
     }

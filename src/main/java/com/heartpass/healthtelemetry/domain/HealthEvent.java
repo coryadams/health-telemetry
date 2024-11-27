@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @Builder
 public class HealthEvent {
 
-    String sessionId;
+    Integer activityId;
 
-    String userId;
+    Integer userProfileId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     public LocalDateTime eventDateTime;

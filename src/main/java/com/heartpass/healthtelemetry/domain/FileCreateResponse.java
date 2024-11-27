@@ -15,6 +15,6 @@ public class FileCreateResponse {
 
     private String fileName;
 
-    private String sessionId;
+    private Integer activityId;
 
 }

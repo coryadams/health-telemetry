@@ -19,11 +19,11 @@ import java.util.ArrayList;
 public class FitFileProcessor implements FileProcessor {
 
     @Override
-    public ArrayList<HealthEvent> processFile(String fileName, String userId, String sessionId) throws IOException {
+    public ArrayList<HealthEvent> processFile(String fileName, Integer userProfileId, Integer activityId) throws IOException {
         Decode decode = new Decode();
         MesgBroadcaster mesgBroadcaster = new MesgBroadcaster();
         ArrayList<HealthEvent> healthEvents = new ArrayList<>();
-        GarminMessageListener garminMessageListener = new GarminMessageListener(healthEvents, userId, sessionId);
+        GarminMessageListener garminMessageListener = new GarminMessageListener(healthEvents, userProfileId, activityId);
 
         InputStream inputStream = null;
         File file = new File(fileName);
