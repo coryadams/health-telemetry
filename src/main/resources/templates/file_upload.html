@@ -11,7 +11,7 @@
     <h1>Heart Pass</h1>
     <h3>Activity File Upload (TCX or FIT)</h3>
 
-    <form action="#" th:action="@{/tcxfile}" th:object="${fileCreateRequest}" method="post">
+    <form action="#" th:action="@{/tcxfile/}" th:object="${fileCreateRequest}" method="post" enctype="multipart/form-data">
         <input type="hidden" th:value="*{userId}" id="userId" name="userId"/>
         <label>
             File:

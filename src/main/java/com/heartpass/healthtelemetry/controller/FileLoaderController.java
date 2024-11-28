@@ -63,10 +63,6 @@ public class FileLoaderController {
 
         ArrayList<HealthEvent> healthEvents = null;
         try {
-            // Check the file's size
-            if (file.getSize() > 1_000_000) { // 1 MB limit
-                throw new RuntimeException("File is too large. The size limit is 1 MB.");
-            }
             // Save the file to the server
             file.transferTo(new java.io.File(fileSavePath + file.getOriginalFilename()));
             // Process the file / uploaded data and save the event data
@@ -81,6 +77,7 @@ public class FileLoaderController {
                 .fileName(file.getOriginalFilename())
                 .userId(userId)
                 .activityId(userActivity.getId())
+                .activityName(activityName)
                 .build();
         return ResponseEntity.ok(response);
     }
@@ -107,10 +104,6 @@ public class FileLoaderController {
 
         ArrayList<HealthEvent> healthEvents = null;
         try {
-            // Check the file's size
-            if (file.getSize() > 1_000_000) { // 1 MB limit
-                throw new RuntimeException("File is too large. The size limit is 1 MB.");
-            }
             // Save the file to the server
             file.transferTo(new java.io.File(fileSavePath + file.getOriginalFilename()));
             // Process the file / uploaded data and save the event data
@@ -124,6 +117,7 @@ public class FileLoaderController {
                 .fileName(file.getOriginalFilename())
                 .userId(userId)
                 .activityId(userActivity.getId())
+                .activityName(activityName)
                 .build();
         return ResponseEntity.ok(response);
     }

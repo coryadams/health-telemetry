@@ -61,7 +61,7 @@ public class FitFileProcessor implements FileProcessor {
         }
         inputStream.close();
         file.delete();
-        log.info("FIT file processed with {} events.", healthEvents.size());
+        log.info("FIT file {} processed with {} events.", fileName, healthEvents.size());
         return healthEvents;
     }
 }

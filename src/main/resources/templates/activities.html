@@ -1,0 +1,16 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Health Telemetry</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<p> Activities for <span th:text="${session.userProfile.firstName}"/></p>
+
+<th:block th:each="activity : ${activities}">
+    <a th:href="@{/activities(id=${activity.id})}"><span th:text="${activity.name}"/></a>
+    <br>
+</th:block>
+
+</body>
+</html>

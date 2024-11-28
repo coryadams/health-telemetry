@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Health Telemetry</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<p> Activity detail for <span th:text="${session.userProfile.firstName}"/> Activity: <span th:text="${activity.name}"/>
+</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Heart Reat BPM</th>
+        <th>Date Time</th>
+    </tr>
+    </thead>
+    <th:block th:each="event : ${healthEvents}">
+        <tr>
+            <td th:text="${event.heartRateBpm}"></td>
+            <td th:text="${event.eventDateTime}"></td>
+        </tr>
+    </th:block>
+</table>
+
+</body>
+</html>

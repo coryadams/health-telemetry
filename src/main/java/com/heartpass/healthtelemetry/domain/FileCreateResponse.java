@@ -17,4 +17,6 @@ public class FileCreateResponse {
 
     private Integer activityId;
 
+    private String activityName;
+
 }

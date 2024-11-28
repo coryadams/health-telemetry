@@ -78,7 +78,7 @@ public class TcxFileProcessor implements FileProcessor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        log.info("TCX file processed with {} events.", healthEvents.size());
+        log.info("TCX file name {} processed with {} events.", fileName, healthEvents.size());
         return healthEvents;
     }
 }
