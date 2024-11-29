@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -55,7 +57,18 @@ public class ActivityController {
 
         Activity activity = activityRepo.findById(id).orElse(null);
 
+        // Create X and y axis Lists for the metrics
         ArrayList<HealthEvent> events = healthMetricsCHRepo.findByUserProfileIdAndActivityId(userProfile.getId(), id);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<String> eventDateTime = new ArrayList<>();
+        List<Integer> heartRateBpm = new ArrayList<>();
+        for (HealthEvent event : events) {
+            eventDateTime.add(event.eventDateTime.format(formatter));
+            heartRateBpm.add(event.heartRateBpm);
+        }
+        model.addAttribute("eventDateTimeList", eventDateTime);
+        model.addAttribute("heartRateBpmList", heartRateBpm);
+        // Just used for debug TODO: pull out
         model.addAttribute("healthEvents", events);
         model.addAttribute("activity", activity);
         return "activitydetails.html";

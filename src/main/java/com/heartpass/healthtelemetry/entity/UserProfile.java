@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.context.annotation.Scope;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,8 +29,9 @@ public class UserProfile {
 
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "userProfile", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Activity> activities;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_profile_id", referencedColumnName = "id")
+    private List<Activity> activities;
 
     private LocalDateTime createdAt;
 

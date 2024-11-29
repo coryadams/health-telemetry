@@ -52,9 +52,8 @@ sudo journalctl -fu otelcol
 
 ## Todo
 
-- Create a simple UI to take input for a user id and datetime range and display heart rate data in a graph.
+- Integrate Spring Security https://bootify.io/spring-security/form-login-with-spring-boot-thymeleaf.html
+- Have the file upload land on an endpoint that routes based on file extension {TCX, FIT}
 
-For evaluating performance:
+HD : For evaluating performance:
 - Consider getting location data for alt, lat, long, temp - Do we need GPX files for this?
-
-- 

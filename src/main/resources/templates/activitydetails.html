@@ -2,12 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Health Telemetry</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+
+    <script src='https://cdn.plot.ly/plotly-2.35.2.min.js'></script>
+
+
 </head>
 <body>
 
 <p> Activity detail for <span th:text="${session.userProfile.firstName}"/> Activity: <span th:text="${activity.name}"/>
 </p>
+<p></p>
+<div id='hrChart'></div>
+<script th:inline="javascript">
+
+    var xList = [[${eventDateTimeList}]]
+    var yList = [[${heartRateBpmList}]]
+    var trace1 = {
+        x: xList,
+        y: yList,
+        mode: 'lines'
+    };
+
+    var data = [ trace1 ];
+
+    var layout = {
+        title: {text: 'Heart Rate BPM'},
+        xaxis: {
+            title: {
+                text: 'Date / Time'
+            },
+            showgrid: false,
+            zeroline: false
+        },
+        yaxis: {
+            title: {
+                text: 'BPM'
+            },
+            showline: false
+        }
+    };
+
+    Plotly.newPlot('hrChart', data, layout);
+</script>
+<p></p>
+<p>Table For Debug</p>
 
 <table>
     <thead>

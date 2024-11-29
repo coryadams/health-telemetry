@@ -34,6 +34,8 @@ public class FitFileProcessor implements FileProcessor {
             throw new RuntimeException("Error opening file " + fileName);
         }
 
+        // Add various Message Listeners here for different types of data
+        // Documentation https://developer.garmin.com/fit/cookbook/decoding-activity-files/
         mesgBroadcaster.addListener((RecordMesgListener)garminMessageListener);
 
         try {
