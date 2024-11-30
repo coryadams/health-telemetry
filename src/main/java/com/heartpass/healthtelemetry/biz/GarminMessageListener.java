@@ -4,6 +4,7 @@ import com.garmin.fit.RecordMesg;
 import com.garmin.fit.RecordMesgListener;
 import com.garmin.fit.util.DateTimeConverter;
 import com.heartpass.healthtelemetry.domain.HealthEvent;
+import com.heartpass.healthtelemetry.domain.HealthEventContainer;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -15,12 +16,15 @@ import java.util.ArrayList;
  */
 public class GarminMessageListener implements RecordMesgListener {
 
+    HealthEventContainer healthEventContainer;
     ArrayList<HealthEvent> healthEvents;
     Integer userProfileId;
     Integer activityId;
 
-    public GarminMessageListener(ArrayList<HealthEvent> healthEvents, Integer userProfileId, Integer activityId) {
-        this.healthEvents = healthEvents;
+    public GarminMessageListener(HealthEventContainer healthEventContainer, Integer userProfileId, Integer activityId) {
+        this.healthEventContainer = healthEventContainer;
+        this.healthEvents = new ArrayList<>();
+        healthEventContainer.setHealthEvents(healthEvents);
         this.userProfileId = userProfileId;
         this.activityId = activityId;
     }

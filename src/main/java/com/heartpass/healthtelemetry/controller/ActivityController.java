@@ -66,6 +66,13 @@ public class ActivityController {
             eventDateTime.add(event.eventDateTime.format(formatter));
             heartRateBpm.add(event.heartRateBpm);
         }
+        model.addAttribute("totalTimeSeconds", activity.getTotalTimeSeconds());
+        model.addAttribute("distanceMeters", activity.getDistanceMeters());
+        model.addAttribute("maxSpeed", activity.getMaxSpeed());
+        model.addAttribute("calories",activity.getCalories());
+        model.addAttribute("avgHeartRateBpm", activity.getAvgHeartRateBpm());
+        model.addAttribute("maxHeartRateBpm", activity.getMaxHeartRateBpm());
+        model.addAttribute("activityDate", activity.getActivityDate());
         model.addAttribute("eventDateTimeList", eventDateTime);
         model.addAttribute("heartRateBpmList", heartRateBpm);
         // Just used for debug TODO: pull out

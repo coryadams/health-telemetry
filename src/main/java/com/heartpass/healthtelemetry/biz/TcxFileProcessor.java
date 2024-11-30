@@ -1,11 +1,13 @@
 package com.heartpass.healthtelemetry.biz;
 
 import com.heartpass.healthtelemetry.domain.HealthEvent;
+import com.heartpass.healthtelemetry.domain.HealthEventContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.events.EndElement;
@@ -26,7 +28,8 @@ public class TcxFileProcessor implements FileProcessor {
     private ResourceLoader resourceLoader;
 
     @Override
-    public ArrayList<HealthEvent> processFile(String fileName, Integer userProfileId, Integer activityId) throws IOException {
+    public HealthEventContainer processFile(String fileName, Integer userProfileId, Integer activityId) throws IOException {
+        HealthEventContainer healthEventContainer = new HealthEventContainer();
         ArrayList<HealthEvent> healthEvents = new ArrayList();
         try {
             File file = new File(fileName);
@@ -42,7 +45,52 @@ public class TcxFileProcessor implements FileProcessor {
                     StartElement element = event.asStartElement();
 
                     switch (element.getName().getLocalPart()) {
-                        // if <staff>
+                        case "Lap":
+                            if (element.getAttributeByName(new QName("StartTime")) != null) {
+                                // Parse the ISO 8601 string into an OffsetDateTime
+                                OffsetDateTime offsetDateTime = OffsetDateTime.parse(element.getAttributeByName(new QName("StartTime")).getValue());
+                                // Convert the OffsetDateTime to a LocalDateTime
+                                healthEventContainer.setEventStartDateTime(offsetDateTime.toLocalDateTime());
+                            }
+                            break;
+                        case "TotalTimeSeconds":
+                            event = reader.nextEvent();
+                            if(event.asCharacters().getData() != null) {
+                                healthEventContainer.setTotalTimeSeconds(Math.round(Float.parseFloat(event.asCharacters().getData())));
+                            }
+                            break;
+                        case "DistanceMeters":
+                            event = reader.nextEvent();
+                            healthEventContainer.setDistanceMeters(Math.round(Float.parseFloat(event.asCharacters().getData())));
+                            break;
+                        case "MaximumSpeed":
+                            event = reader.nextEvent();
+                            if(event.asCharacters().getData() != null) {
+                                healthEventContainer.setMaxSpeed(Math.round(Float.parseFloat(event.asCharacters().getData())));
+                            }
+                            break;
+                        case "Calories":
+                            event = reader.nextEvent();
+                            if(event.asCharacters().getData() != null) {
+                                healthEventContainer.setCalories(Math.round(Float.parseFloat(event.asCharacters().getData())));
+                            }
+                            break;
+                        case "AverageHeartRateBpm":
+                            event = reader.nextEvent();
+                            event = reader.nextEvent();
+                            event = reader.nextEvent();
+                            if(event.asCharacters().getData() != null) {
+                                healthEventContainer.setAverageHeartRateBpm(Integer.parseInt(event.asCharacters().getData()));
+                            }
+                            break;
+                        case "MaximumHeartRateBpm":
+                            event = reader.nextEvent();
+                            event = reader.nextEvent();
+                            event = reader.nextEvent();
+                            if(event.asCharacters().getData() != null) {
+                                healthEventContainer.setMaxHeartRateBpm(Integer.parseInt(event.asCharacters().getData()));
+                            }
+                            break;
                         case "Trackpoint":
                             healthEvent = new HealthEvent();
                             healthEvent.setActivityId(activityId);
@@ -72,6 +120,7 @@ public class TcxFileProcessor implements FileProcessor {
                     }
                 }
             }
+            healthEventContainer.setHealthEvents(healthEvents);
             inputStream.close();
             reader.close();
             file.delete();
@@ -79,6 +128,6 @@ public class TcxFileProcessor implements FileProcessor {
             e.printStackTrace();
         }
         log.info("TCX file name {} processed with {} events.", fileName, healthEvents.size());
-        return healthEvents;
+        return healthEventContainer;
     }
 }

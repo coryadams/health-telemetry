@@ -5,6 +5,7 @@ import com.garmin.fit.FitRuntimeException;
 import com.garmin.fit.MesgBroadcaster;
 import com.garmin.fit.RecordMesgListener;
 import com.heartpass.healthtelemetry.domain.HealthEvent;
+import com.heartpass.healthtelemetry.domain.HealthEventContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,12 @@ import java.util.ArrayList;
 public class FitFileProcessor implements FileProcessor {
 
     @Override
-    public ArrayList<HealthEvent> processFile(String fileName, Integer userProfileId, Integer activityId) throws IOException {
+    public HealthEventContainer processFile(String fileName, Integer userProfileId, Integer activityId) throws IOException {
         Decode decode = new Decode();
         MesgBroadcaster mesgBroadcaster = new MesgBroadcaster();
+        HealthEventContainer healthEventContainer = new HealthEventContainer();
         ArrayList<HealthEvent> healthEvents = new ArrayList<>();
-        GarminMessageListener garminMessageListener = new GarminMessageListener(healthEvents, userProfileId, activityId);
+        GarminMessageListener garminMessageListener = new GarminMessageListener(healthEventContainer, userProfileId, activityId);
 
         InputStream inputStream = null;
         File file = new File(fileName);
@@ -63,7 +65,7 @@ public class FitFileProcessor implements FileProcessor {
         }
         inputStream.close();
         file.delete();
-        log.info("FIT file {} processed with {} events.", fileName, healthEvents.size());
-        return healthEvents;
+        log.info("FIT file {} processed with {} events.", fileName, healthEventContainer.getHealthEvents().size());
+        return healthEventContainer;
     }
 }

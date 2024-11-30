@@ -27,6 +27,8 @@
     var data = [ trace1 ];
 
     var layout = {
+        width: 1024,
+        height: 400,
         title: {text: 'Heart Rate BPM'},
         xaxis: {
             title: {
@@ -45,9 +47,32 @@
 
     Plotly.newPlot('hrChart', data, layout);
 </script>
+<table>
+    <tr>
+        <td>Total Time Seconds</td><td><span th:text ="${totalTimeSeconds}"></span></td>
+    </tr>
+    <tr>
+        <td>Distance Meters</td><td><span th:text="${distanceMeters}"></span></td>
+    </tr>
+    <tr>
+        <td>Max Speed </td><td><span th:text="${maxSpeed}"></span></td>
+    </tr>
+    <tr>
+        <td>Calories</td><td><span  th:text="${calories}"></span></td>
+    </tr>
+    <tr>
+        <td>Avg Heart Rate BPM</td><td><span th:text="${avgHeartRateBpm}"></span></td>
+    </tr>
+    <tr>
+        <td>Max Heart Rate BPM</td><td><span th:text="${maxHeartRateBpm}"></span></td>
+    </tr>
+    <tr>
+        <td>Activity Date</td><td><span th:text="${activityDate}"></span></td>
+    </tr>
+</table>
 <p></p>
-<p>Table For Debug</p>
 
+<p>Table For Debug</p>
 <table>
     <thead>
     <tr>

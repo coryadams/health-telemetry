@@ -20,6 +20,18 @@ public class Activity {
 
     private String fileName;
 
+    int totalTimeSeconds;
+
+    int distanceMeters;
+
+    int maxSpeed;
+
+    int calories;
+
+    int avgHeartRateBpm;
+
+    int maxHeartRateBpm;
+
     private LocalDateTime activityDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

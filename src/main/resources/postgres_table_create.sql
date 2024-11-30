@@ -15,10 +15,16 @@ CREATE INDEX user_profile_email_idx ON user_profile (email);
 
 CREATE TABLE activity
 (
-    id              SERIAL PRIMARY KEY,
-    name            varchar(125),
-    description     varchar(255),
-    file_name       varchar(255),
+    id                  SERIAL PRIMARY KEY,
+    name                varchar(125),
+    description         varchar(255),
+    file_name           varchar(255),
+    total_time_seconds  integer,
+    distance_meters      integer,
+    max_speed            integer,
+    calories            integer,
+    avg_heart_rate_bpm  integer,
+    max_heart_rate_bpm  integer,
     activity_date    timestamp,
     user_profile_id integer,
     created_at      timestamp,

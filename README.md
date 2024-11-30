@@ -51,7 +51,7 @@ To check the output from the otelcol service, run:
 sudo journalctl -fu otelcol
 
 ## Todo
-
+- Add other activity data in the FIT processor to align with TCX from HealthEventContainer
 - Integrate Spring Security https://bootify.io/spring-security/form-login-with-spring-boot-thymeleaf.html
 - Have the file upload land on an endpoint that routes based on file extension {TCX, FIT}
 

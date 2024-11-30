@@ -2,6 +2,7 @@ package com.heartpass.healthtelemetry.controller;
 
 import com.heartpass.healthtelemetry.domain.FileCreateResponse;
 import com.heartpass.healthtelemetry.domain.HealthEvent;
+import com.heartpass.healthtelemetry.domain.HealthEventContainer;
 import com.heartpass.healthtelemetry.entity.Activity;
 import com.heartpass.healthtelemetry.entity.UserProfile;
 import com.heartpass.healthtelemetry.service.MetricsFileService;
@@ -61,20 +62,31 @@ public class FileLoaderController {
 
         // TODO: Get the activity created time from the file
 
-        ArrayList<HealthEvent> healthEvents = null;
+        HealthEventContainer healthEventContainer = null;
         try {
             // Save the file to the server
             file.transferTo(new java.io.File(fileSavePath + file.getOriginalFilename()));
             // Process the file / uploaded data and save the event data
             // TODO: Retrieve the creation date for the activity from the file
-            healthEvents = metricsFileService.storeTcxFile(fileSavePath + file.getOriginalFilename(), userProfile.getId(),
+            healthEventContainer = metricsFileService.storeTcxFile(fileSavePath + file.getOriginalFilename(), userProfile.getId(),
                     userActivity.getId());
+
+            // Update the rest of the Activity data from the file
+            userActivity.setTotalTimeSeconds(healthEventContainer.getTotalTimeSeconds());
+            userActivity.setDistanceMeters(healthEventContainer.getDistanceMeters());
+            userActivity.setMaxSpeed(healthEventContainer.getMaxSpeed());
+            userActivity.setCalories(healthEventContainer.getCalories());
+            userActivity.setAvgHeartRateBpm(healthEventContainer.getAverageHeartRateBpm());
+            userActivity.setMaxHeartRateBpm(healthEventContainer.getMaxHeartRateBpm());
+            userActivity.setActivityDate(healthEventContainer.getEventStartDateTime());
+            userActivity = userActivityService.save(userActivity);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         FileCreateResponse response = FileCreateResponse.builder()
-                .message("TCX file successfully saved with " + healthEvents.size() + " events processed.")
+                .message("TCX file successfully saved with " + healthEventContainer.getHealthEvents().size() + " events processed.")
                 .fileName(file.getOriginalFilename())
+                .eventsProcessed(healthEventContainer.getHealthEvents().size())
                 .userId(userId)
                 .activityId(userActivity.getId())
                 .activityName(activityName)
@@ -102,19 +114,30 @@ public class FileLoaderController {
 
         // TODO: Get the activity created time from the file
 
-        ArrayList<HealthEvent> healthEvents = null;
+        HealthEventContainer healthEventContainer = null;
         try {
             // Save the file to the server
             file.transferTo(new java.io.File(fileSavePath + file.getOriginalFilename()));
             // Process the file / uploaded data and save the event data
-            healthEvents = metricsFileService.storeFitFile(fileSavePath + file.getOriginalFilename(), userProfile.getId(),
+            healthEventContainer = metricsFileService.storeFitFile(fileSavePath + file.getOriginalFilename(), userProfile.getId(),
                     userActivity.getId());
+
+            // Update the rest of the Activity data from the file
+            userActivity.setTotalTimeSeconds(healthEventContainer.getTotalTimeSeconds());
+            userActivity.setDistanceMeters(healthEventContainer.getDistanceMeters());
+            userActivity.setMaxSpeed(healthEventContainer.getMaxSpeed());
+            userActivity.setCalories(healthEventContainer.getCalories());
+            userActivity.setAvgHeartRateBpm(healthEventContainer.getAverageHeartRateBpm());
+            userActivity.setMaxHeartRateBpm(healthEventContainer.getMaxHeartRateBpm());
+            userActivity.setActivityDate(healthEventContainer.getEventStartDateTime());
+            userActivity = userActivityService.save(userActivity);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         FileCreateResponse response = FileCreateResponse.builder()
-                .message("FIT file successfully saved with " + healthEvents.size() + " events processed.")
+                .message("FIT file successfully saved with " + healthEventContainer.getHealthEvents().size() + " events processed.")
                 .fileName(file.getOriginalFilename())
+                .eventsProcessed(healthEventContainer.getHealthEvents().size())
                 .userId(userId)
                 .activityId(userActivity.getId())
                 .activityName(activityName)
