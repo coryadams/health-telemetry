@@ -25,6 +25,7 @@ public class LoginController {
 
     /**
      * userId will be loaded into the Session
+     *
      * @param request
      * @param userId
      * @param password
@@ -32,20 +33,21 @@ public class LoginController {
      * @return
      */
     @PostMapping({"/login"})
-    public String processLogin(HttpServletRequest request,  @RequestParam String userId, @RequestParam String password, Model model) {
+    public String processLogin(HttpServletRequest request, @RequestParam String userId, @RequestParam String password, Model model) {
         UserProfile userProfile;
         userProfile = userProfileService.retrieve(userId);
-        if (userProfile != null) {
+        if (userProfile != null && !userProfile.getPassword().equals(password)) {
+            model.addAttribute("authError", "true");
+            return "/login";
+        } else if (userProfile != null) {
             request.getSession().setAttribute("userProfile", userProfile);
             return "/landing.html";
-        } else {
-            model.addAttribute("authError", "Authentication failed");
-            return "/login";
         }
+        return "/login";
     }
 
     @PostMapping({"/logout"})
-    public String processLogout(HttpServletRequest request,  @RequestParam String userId, Model model) {
+    public String processLogout(HttpServletRequest request, @RequestParam String userId, Model model) {
         request.getSession().removeAttribute("userProfile");
         return "/login.html";
     }

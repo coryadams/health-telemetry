@@ -1,6 +1,7 @@
 package com.heartpass.healthtelemetry.controller;
 
 import com.heartpass.healthtelemetry.domain.FileCreateRequest;
+import com.heartpass.healthtelemetry.entity.UserProfile;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping({"/", "/index.html"})
-    public String index() {
+    public String index(HttpServletRequest request) {
+        UserProfile userProfile = (UserProfile) request.getSession().getAttribute("userProfile");
+        if (userProfile == null) {
+            return "/login.html";
+        }
         return "/index";
     }
 
