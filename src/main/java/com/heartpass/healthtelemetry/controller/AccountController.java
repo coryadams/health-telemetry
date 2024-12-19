@@ -34,6 +34,6 @@ public class AccountController {
         userProfileService.save(userProfile);
 
         model.addAttribute("userProfile", userProfile);
-        return "/landing";
+        return "landing_old";
     }
 }

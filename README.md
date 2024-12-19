@@ -57,3 +57,21 @@ sudo journalctl -fu otelcol
 
 HD : For evaluating performance:
 - Consider getting location data for alt, lat, long, temp - Do we need GPX files for this?
+
+12/3/2024 Meeting with David and Heidi
+- https://developers.strava.com/
+- Capture and display the distance and speed metrics for each timestamp
+- How do we get non activity related data?
+- Get 4 buckets of data to determine wellness score
+- Get Survey
+- Onboarding
+  - Survey
+  - medical grade patch
+  - blood pressure
+  - 2 week eval and data to provide doctor
+  - Get Garmin data
+- Garmin Connectivity to imitate how our data goes to Strava 
+  https://helpdocs.validic.com/
+  https://www.qtmedical.com/
+  https://www.heartbeam.com This could be what we send out to baseline
+  -  Check HeartBeam which is a card with 12 lead ecg that Dr Shipon is part of.

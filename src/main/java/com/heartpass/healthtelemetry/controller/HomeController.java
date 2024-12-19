@@ -16,7 +16,7 @@ public class HomeController {
         if (userProfile == null) {
             return "/login.html";
         }
-        return "/index";
+        return "index";
     }
 
     /**

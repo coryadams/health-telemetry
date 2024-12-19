@@ -1,6 +1,8 @@
 package com.heartpass.healthtelemetry.controller;
 
+import com.heartpass.healthtelemetry.entity.Activity;
 import com.heartpass.healthtelemetry.entity.UserProfile;
+import com.heartpass.healthtelemetry.repository.ActivityRepo;
 import com.heartpass.healthtelemetry.service.UserProfileService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+
 @Controller
 @Scope("session")
 public class LoginController {
 
     @Autowired
     UserProfileService userProfileService;
+
+    @Autowired
+    ActivityRepo activityRepo;
 
     @GetMapping({"/login.html"})
     public String login() {
@@ -41,13 +48,15 @@ public class LoginController {
             return "/login";
         } else if (userProfile != null) {
             request.getSession().setAttribute("userProfile", userProfile);
-            return "/landing.html";
+            ArrayList<Activity> activities = activityRepo.findByUserProfileId(userProfile.getId());
+            model.addAttribute("activities", activities);
+            return "/index.html";
         }
         return "/login";
     }
 
-    @PostMapping({"/logout"})
-    public String processLogout(HttpServletRequest request, @RequestParam String userId, Model model) {
+    @GetMapping({"/logout"})
+    public String processLogout(HttpServletRequest request) {
         request.getSession().removeAttribute("userProfile");
         return "/login.html";
     }
